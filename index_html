@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Мій Telegram WebApp</title>
+    <meta charset="UTF-8">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        /* Додамо базові стилі, щоб поле вводу та кнопка виглядали краще */
+        body {
+            background-color: var(--tg-theme-bg-color, #222222); /* Колір фону з теми Telegram */
+            color: var(--tg-theme-text-color, #FFFFFF); /* Колір тексту з теми Telegram */
+            padding: 20px;
+            font-family: sans-serif;
+            text-align: center;
+        }
+        h1 { margin-bottom: 20px; }
+        input[type="text"] {
+            width: 90%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--tg-theme-hint-color, #666666);
+            border-radius: 8px;
+            box-sizing: border-box;
+            background-color: var(--tg-theme-secondary-bg-color, #1a1a1a);
+            color: var(--tg-theme-text-color, #FFFFFF);
+        }
+        /* Приховаємо стару HTML-кнопку, оскільки будемо використовувати MainButton */
+        #htmlButton { display: none; }
+    </style>
+</head>
+<body>
+    <h1>Введення даних в бот</h1>
+    <p>Введіть текст нижче. Для відправки використовуйте синю кнопку внизу.</p>
+
+    <input type="text" id="userInput" placeholder="Введіть ваш текст">
+
+    <button id="htmlButton" onclick="sendDataToBot()">
+        Надіслати в бот
+    </button>
+
+    <script>
+        // 1. Ініціалізація WebApp API
+        Telegram.WebApp.ready();
+
+        // 2. Встановлення кольору та активація Головної Кнопки
+        Telegram.WebApp.setHeaderColor('secondary_bg_color'); // Колір заголовка
+        Telegram.WebApp.MainButton.setText('Надіслати та закрити').show(); // Показуємо кнопку
+
+        // 3. Прив'язка функції відправки до натискання Головної Кнопки
+        Telegram.WebApp.MainButton.onClick(sendDataToBot);
+
+        function sendDataToBot() {
+            // 4. Отримуємо дані з поля
+            const inputText = document.getElementById('userInput').value;
+
+            // 5. Формуємо та відправляємо JSON
+            const dataToSend = JSON.stringify({
+                action: "user_input",
+                message: inputText,
+                user_id: Telegram.WebApp.initDataUnsafe.user.id
+            });
+
+            Telegram.WebApp.sendData(dataToSend);
+            Telegram.WebApp.close();
+        }
+    </script>
+</body>
+</html>
