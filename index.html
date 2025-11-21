@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Мій Telegram WebApp</title>
+    <meta charset="UTF-8"> 
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <h1>Введення даних в бот</h1>
+    <p>Введіть текст нижче і натисніть кнопку. Бот отримає ваше повідомлення.</p>
+
+    <input type="text" id="userInput" placeholder="Введіть ваш текст" style="width: 90%; padding: 10px; margin-bottom: 15px;">
+
+    <button onclick="sendDataToBot()" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer;">
+        Надіслати в бот
+    </button>
+
+    <script>
+        Telegram.WebApp.ready();
+
+        function sendDataToBot() {
+            const inputText = document.getElementById('userInput').value;
+
+            const dataToSend = JSON.stringify({
+                action: "user_input",
+                message: inputText, 
+                user_id: Telegram.WebApp.initDataUnsafe.user.id
+            });
+
+            Telegram.WebApp.sendData(dataToSend);
+            Telegram.WebApp.close(); 
+        }
+    </script>
+</body>
+</html>
